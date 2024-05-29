@@ -6,29 +6,32 @@ import jakarta.ws.rs.core.Response;
 
 import org.example.Repositories.VolunteerRepository;
 import org.example.entities.Volunteer;
+import org.example.services.VolunteerService;
 
 import java.util.List;
 
 @Path("volunteer")
 
-public class VolunteersResource {
-    public VolunteerRepository userRepositoryOrcl;
+public class VolunteerResource {
+    public VolunteerRepository volunteerRepository;
+    public VolunteerService volunteerService;
 
-    public VolunteersResource() {
-        userRepositoryOrcl = new VolunteerRepository();
+    public VolunteerResource() {
+        volunteerRepository = new VolunteerRepository();
+        volunteerService = new VolunteerService();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Volunteer> getAll() {
-        return userRepositoryOrcl.readAll();
+        return volunteerRepository.readAll();
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("id") int id) {
-        var user = userRepositoryOrcl.getVolunteerById(id);
+        var user = volunteerRepository.getVolunteerById(id);
         return user.isPresent() ?
                 Response.ok(user.get()).build() :
                 Response.status(Response.Status.NOT_FOUND).build();
@@ -38,7 +41,7 @@ public class VolunteersResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(Volunteer user) {
         try {
-            userRepositoryOrcl.create(user);
+            volunteerService.create(user);
             return Response.status(Response.Status.CREATED).entity("Cadastro de voluntário realizado com sucesso!").build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
@@ -50,7 +53,7 @@ public class VolunteersResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") int id, Volunteer user) {
         try {
-            userRepositoryOrcl.update(id, user);
+            volunteerService.update(id, user);
             return Response.ok().entity("Dados atualizados com sucesso!").build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
@@ -61,7 +64,7 @@ public class VolunteersResource {
     @Path("{id}")
     public Response deleteById(@PathParam("id") int id) {
         try {
-            userRepositoryOrcl.delete(id);
+            volunteerRepository.delete(id);
             return Response.ok().entity("Voluntário deletado com sucesso!").build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();

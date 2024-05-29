@@ -7,29 +7,32 @@ import org.example.Repositories.PartnerRepository;
 import org.example.Repositories.VolunteerRepository;
 import org.example.entities.Partner;
 import org.example.entities.Volunteer;
+import org.example.services.PartnerService;
 
 import java.util.List;
 
 @Path("partner")
 
 public class PartnerResource {
-    public PartnerRepository userRepositoryOrcl;
+    public PartnerRepository partnerRepository;
+    public PartnerService partnerService;
 
     public PartnerResource() {
-        userRepositoryOrcl = new PartnerRepository();
+        partnerRepository = new PartnerRepository();
+        partnerService = new PartnerService();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Partner> getAll() {
-        return userRepositoryOrcl.readAll();
+        return partnerRepository.readAll();
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("id") int id) {
-        var user = userRepositoryOrcl.getPartenerById(id);
+        var user = partnerRepository.getPartenerById(id);
         return user.isPresent() ?
                 Response.ok(user.get()).build() :
                 Response.status(Response.Status.NOT_FOUND).build();
@@ -37,9 +40,9 @@ public class PartnerResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(Partner user) {
+    public Response create(Partner partner) {
         try {
-            userRepositoryOrcl.create(user);
+            partnerService.create(partner);
             return Response.status(Response.Status.CREATED).entity("Cadastro de empresa parceira realizado com sucesso!").build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
@@ -49,9 +52,9 @@ public class PartnerResource {
     @PUT
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") int id, Partner user) {
+    public Response update(@PathParam("id") int id, Partner partner) {
         try {
-            userRepositoryOrcl.update(id, user);
+            partnerService.update(id, partner);
             return Response.ok().entity("Dados atualizados com sucesso!").build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
@@ -62,7 +65,7 @@ public class PartnerResource {
     @Path("{id}")
     public Response deleteById(@PathParam("id") int id) {
         try {
-            userRepositoryOrcl.delete(id);
+            partnerRepository.delete(id);
             return Response.ok().entity("Parceiro deletado com sucesso!").build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
