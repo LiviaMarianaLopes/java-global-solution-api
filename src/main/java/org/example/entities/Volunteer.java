@@ -1,26 +1,28 @@
 package org.example.entities;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Map;
 import java.util.StringJoiner;
 
 public class Volunteer extends Collaborator {
-    private Date dataDeNascimento;
+    private LocalDate dataDeNascimento;
 
     public Volunteer() {
     }
 
-    public Volunteer(int id, String nome, String email, String telefone, Date dataDeNascimento) {
-        super(id, nome, email, telefone);
+
+    public Volunteer(int id, String nome, String email, String telefone, int idCollaborator, LocalDate dataDeNascimento) {
+        super(id, nome, email, telefone, idCollaborator);
         this.dataDeNascimento = dataDeNascimento;
     }
 
-    public Date getDataDeNascimento() {
+
+    public LocalDate getDataDeNascimento() {
         return dataDeNascimento;
     }
 
-    public void setDataDeNascimento(Date dataDeNascimento) {
+    public void setDataDeNascimento(LocalDate dataDeNascimento) {
         this.dataDeNascimento = dataDeNascimento;
     }
 

@@ -8,6 +8,7 @@ public abstract class Collaborator extends _BaseEntity {
     private String nome;
     private String email;
     private String telefone;
+    private int idCollaborator;
 
     public Collaborator() {
     }
@@ -17,6 +18,26 @@ public abstract class Collaborator extends _BaseEntity {
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
+    }
+
+    public Collaborator(int id, String nome, String email, String telefone, int idCollaborator) {
+        super(id);
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+        this.idCollaborator = idCollaborator;
+    }
+
+    public int getIdCollaborator() {
+        return idCollaborator;
+    }
+
+    public void setIdCollaborator(int idCollaborator) {
+        this.idCollaborator = idCollaborator;
+    }
+
+    public Collaborator(int id) {
+        super(id);
     }
 
     public String getNome() {
@@ -68,6 +89,7 @@ public abstract class Collaborator extends _BaseEntity {
                 .add("nome='" + nome + "'")
                 .add("email='" + email + "'")
                 .add("telefone='" + telefone + "'")
+                .add("idCollaborator=" + idCollaborator)
                 .toString();
     }
 }

@@ -17,6 +17,12 @@ public class Partner extends Collaborator {
         this.industria = industria;
     }
 
+    public Partner(int id, String nome, String email, String telefone, int idCollaborator, String cnpj, String industria) {
+        super(id, nome, email, telefone, idCollaborator);
+        this.cnpj = cnpj;
+        this.industria = industria;
+    }
+
     public String getCnpj() {
         return cnpj;
     }
@@ -53,10 +59,6 @@ public class Partner extends Collaborator {
     @Override
     public String toString() {
         return new StringJoiner(", ", Partner.class.getSimpleName() + "[", "]")
-                .add("id=" + getId())
-                .add("nome='" + getNome() + "'")
-                .add("email='" + getEmail() + "'")
-                .add("telefone='" + getTelefone() + "'")
                 .add("cnpj='" + cnpj + "'")
                 .add("industria='" + industria + "'")
                 .toString();
