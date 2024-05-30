@@ -8,6 +8,7 @@ import org.example.Repositories.CollaboratorRepository;
 import org.example.entities.Alert;
 import org.example.services.AlertService;
 
+import java.io.IOException;
 import java.util.List;
 
 @Path("alert")
@@ -44,7 +45,7 @@ public class AlertResource {
         try {
             alertService.create(alert);
             return Response.status(Response.Status.CREATED).entity("Alerta cadastrado com sucesso!").build();
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | IOException | InterruptedException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
@@ -72,7 +73,7 @@ public class AlertResource {
         try {
             alertService.update(id, alert);
             return Response.ok().entity("Dados atualizados com sucesso!").build();
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | IOException | InterruptedException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }

@@ -67,7 +67,7 @@ public class Alert extends _BaseEntity {
     public Map<Boolean, ArrayList<String>> validate() {
         var errors = new ArrayList<String>();
         if (nomeLocal == null || nomeLocal.isBlank())
-            errors.add("O campo nome da praia não pode estar vazio");
+            errors.add("O campo nome do local não pode estar vazio");
         if (cep == null || cep.isBlank())
             errors.add("CEP não pode estar vazio");
         if (cep.length() < 8 || cep.length() > 9)
