@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.StringJoiner;
 
-public abstract class Collaborator extends _BaseEntity {
+public class Collaborator extends _BaseEntity {
     private String nome;
     private String email;
     private String telefone;

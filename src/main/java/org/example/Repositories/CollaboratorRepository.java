@@ -1,10 +1,13 @@
 package org.example.Repositories;
 
 import org.example.Infrastructure.DatabaseConfig;
+import org.example.entities.Alert;
 import org.example.entities.Collaborator;
 import org.example.utils.Loggable;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class CollaboratorRepository implements Loggable<String> {
@@ -66,6 +69,29 @@ public class CollaboratorRepository implements Loggable<String> {
         } catch (Exception e) {
             logError("Erro ao excluir Colaborador: " + e.getMessage());
         }
+    }
+    public List<Collaborator> readAll() {
+        List<Collaborator> collaboratorList = new ArrayList<>();
+        String selectAllSQL = "SELECT * FROM " + TB_NAME + " ORDER BY ID";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(selectAllSQL)) {
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Collaborator collaborator = new Collaborator(
+                        rs.getInt(ID_COLUMN),
+                        rs.getString(NOME_COLUMN),
+                        rs.getString(EMAIL_COLUMN),
+                        rs.getString(TELEFONE_COLUMN));
+                collaboratorList.add(collaborator);
+            }
+
+        } catch (Exception e) {
+            logError("Erro ao listar colaboradores: " + e.getMessage());
+        }
+        return collaboratorList;
     }
 
     public Optional<Integer> getId(String email) {

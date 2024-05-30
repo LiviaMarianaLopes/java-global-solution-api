@@ -40,11 +40,11 @@ public class Alert extends _BaseEntity {
         this.cep = cep;
     }
 
-    public String getNomePraia() {
+    public String getNomeLocal() {
         return nomeLocal;
     }
 
-    public void setNomePraia(String nomeLocal) {
+    public void setNomeLocal(String nomeLocal) {
         this.nomeLocal = nomeLocal;
     }
 

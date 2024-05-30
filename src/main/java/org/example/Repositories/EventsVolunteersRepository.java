@@ -54,7 +54,7 @@ public class EventsVolunteersRepository implements Loggable<String> {
             }
 
         } catch (Exception e) {
-            System.out.println("Erro ao listar usuários: " + e.getMessage());
+            System.out.println("Erro ao listar tabela EventsVolunteers: " + e.getMessage());
         }
         return eventVolunteerList;
     }
