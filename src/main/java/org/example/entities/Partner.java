@@ -49,8 +49,6 @@ public class Partner extends Collaborator {
             errors.add("O campo CNPJ não pode estar vazio");
         if (cnpj.length() < 14 || cnpj.length() > 18)
             errors.add("CNPJ inválido");
-        if (industria == null || industria.isBlank())
-            errors.add("O campo industria não pode estar vazio");
         return !errors.isEmpty() ?
                 Map.of(false, errors) :
                 Map.of(true, errors);

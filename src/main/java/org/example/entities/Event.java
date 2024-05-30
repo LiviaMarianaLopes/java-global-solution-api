@@ -9,16 +9,18 @@ public class Event extends _BaseEntity{
     private String titulo;
     private String descricao;
     private Timestamp data;
+    private String local;
     private int idAlerta;
 
     public Event() {
     }
 
-    public Event(int id, String titulo, String descricao, Timestamp data, int idAlerta) {
+    public Event(int id, String titulo, String descricao, Timestamp data, String local, int idAlerta) {
         super(id);
         this.titulo = titulo;
         this.descricao = descricao;
         this.data = data;
+        this.local = local;
         this.idAlerta = idAlerta;
     }
 
@@ -50,6 +52,14 @@ public class Event extends _BaseEntity{
         return idAlerta;
     }
 
+    public String getLocal() {
+        return local;
+    }
+
+    public void setLocal(String local) {
+        this.local = local;
+    }
+
     public void setIdAlerta(int idAlerta) {
         this.idAlerta = idAlerta;
     }
@@ -57,8 +67,8 @@ public class Event extends _BaseEntity{
         var errors = new ArrayList<String>();
         if (titulo == null || titulo.isBlank())
             errors.add("O campo título não pode estar vazio");
-        if (descricao == null || descricao.isBlank())
-            errors.add("Descrição não pode estar vazio");
+        if (local == null || local.isBlank())
+            errors.add("Local não pode estar vazio");
         if (data == null)
             errors.add("Data do evento não pode ser null");
         if (idAlerta < 1) {
@@ -68,12 +78,14 @@ public class Event extends _BaseEntity{
                 Map.of(false, errors) :
                 Map.of(true, errors);
     }
+
     @Override
     public String toString() {
         return new StringJoiner(", ", Event.class.getSimpleName() + "[", "]")
                 .add("titulo='" + titulo + "'")
                 .add("descricao='" + descricao + "'")
                 .add("data=" + data)
+                .add("local='" + local + "'")
                 .add("idAlerta=" + idAlerta)
                 .toString();
     }

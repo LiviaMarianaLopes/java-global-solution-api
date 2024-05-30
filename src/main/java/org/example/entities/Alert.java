@@ -7,7 +7,7 @@ import java.util.StringJoiner;
 public class Alert extends _BaseEntity {
 
     private String cep;
-    private String nomePraia;
+    private String nomeLocal;
     private String referencia;
     private String descricao;
     private int idColaborador;
@@ -15,10 +15,10 @@ public class Alert extends _BaseEntity {
     public Alert() {
     }
 
-    public Alert(int id, String cep, String nomePraia, String referencia, String descricao, int idColaborador) {
+    public Alert(int id, String cep, String nomeLocal, String referencia, String descricao, int idColaborador) {
         super(id);
         this.cep = cep;
-        this.nomePraia = nomePraia;
+        this.nomeLocal = nomeLocal;
         this.referencia = referencia;
         this.descricao = descricao;
         this.idColaborador = idColaborador;
@@ -41,11 +41,11 @@ public class Alert extends _BaseEntity {
     }
 
     public String getNomePraia() {
-        return nomePraia;
+        return nomeLocal;
     }
 
-    public void setNomePraia(String nomePraia) {
-        this.nomePraia = nomePraia;
+    public void setNomePraia(String nomeLocal) {
+        this.nomeLocal = nomeLocal;
     }
 
     public String getReferencia() {
@@ -66,12 +66,8 @@ public class Alert extends _BaseEntity {
 
     public Map<Boolean, ArrayList<String>> validate() {
         var errors = new ArrayList<String>();
-        if (nomePraia == null || nomePraia.isBlank())
+        if (nomeLocal == null || nomeLocal.isBlank())
             errors.add("O campo nome da praia não pode estar vazio");
-        if (descricao == null || descricao.isBlank())
-            errors.add("Descrição não pode estar vazio");
-        if (referencia == null || referencia.isBlank())
-            errors.add("O campo referêcia não pode estar vazio");
         if (cep == null || cep.isBlank())
             errors.add("CEP não pode estar vazio");
         if (cep.length() < 8 || cep.length() > 9)
@@ -88,7 +84,7 @@ public class Alert extends _BaseEntity {
     public String toString() {
         return new StringJoiner(", ", Alert.class.getSimpleName() + "[", "]")
                 .add("cep='" + cep + "'")
-                .add("nomePraia='" + nomePraia + "'")
+                .add("nomeLocal='" + nomeLocal + "'")
                 .add("referencia='" + referencia + "'")
                 .add("descricao='" + descricao + "'")
                 .add("idColaborador=" + idColaborador)
