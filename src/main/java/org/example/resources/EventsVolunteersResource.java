@@ -30,7 +30,7 @@ public class EventsVolunteersResource {
         try {
             System.out.println(email);
             eventsVolunteersService.registerVolunteerInEvent(id, email);
-            return Response.status(Response.Status.CREATED).entity("Cadastro de participação realizado com sucesso!").build();
+            return Response.status(Response.Status.CREATED).entity("Participação cadastrada com sucesso!").build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }

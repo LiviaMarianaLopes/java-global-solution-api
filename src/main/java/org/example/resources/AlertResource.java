@@ -43,7 +43,7 @@ public class AlertResource {
     public Response create(Alert alert) {
         try {
             alertService.create(alert);
-            return Response.status(Response.Status.CREATED).entity("Cadastro de alerta realizado com sucesso!").build();
+            return Response.status(Response.Status.CREATED).entity("Alerta cadastrado com sucesso!").build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }

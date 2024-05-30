@@ -3,46 +3,44 @@ package org.example.resources;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import org.example.Repositories.VolunteerRepository;
-import org.example.entities.Volunteer;
-import org.example.services.VolunteerService;
+import org.example.Repositories.EventRepository;
+import org.example.entities.Event;
+import org.example.services.EventService;
 
 import java.util.List;
 
-@Path("volunteer")
+@Path("event")
+public class EventResource {
+    public EventRepository eventRepository;
+    public EventService eventService;
 
-public class VolunteerResource {
-    public VolunteerRepository volunteerRepository;
-    public VolunteerService volunteerService;
-
-    public VolunteerResource() {
-        volunteerRepository = new VolunteerRepository();
-        volunteerService = new VolunteerService();
+    public EventResource() {
+        eventRepository = new EventRepository();
+        eventService = new EventService();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Volunteer> getAll() {
-        return volunteerRepository.readAll();
+    public List<Event> getAll() {
+        return eventRepository.readAll();
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("id") int id) {
-        var volunteer = volunteerRepository.getVolunteerById(id);
-        return volunteer.isPresent() ?
-                Response.ok(volunteer.get()).build() :
+        var event = eventRepository.getEventById(id);
+        return event.isPresent() ?
+                Response.ok(event.get()).build() :
                 Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(Volunteer volunteer) {
+    public Response create(Event event) {
         try {
-            volunteerService.create(volunteer);
-            return Response.status(Response.Status.CREATED).entity("Cadastro realizado com sucesso!").build();
+            eventService.create(event);
+            return Response.status(Response.Status.CREATED).entity("Evento cadastrado com sucesso!").build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -51,9 +49,9 @@ public class VolunteerResource {
     @PUT
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") int id, Volunteer volunteer) {
+    public Response update(@PathParam("id") int id, Event event) {
         try {
-            volunteerService.update(id, volunteer);
+            eventService.update(id, event);
             return Response.ok().entity("Dados atualizados com sucesso!").build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
@@ -64,14 +62,14 @@ public class VolunteerResource {
     @Path("{id}")
     public Response deleteById(@PathParam("id") int id) {
         try {
-            volunteerRepository.delete(id);
-            return Response.ok().entity("Voluntário deletado com sucesso!").build();
+            eventRepository.delete(id);
+            return Response.ok().entity("Evento deletado com sucesso!").build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
 
     }
 
-
 }
+
 
