@@ -70,9 +70,6 @@ public class Collaborator extends _BaseEntity {
             errors.add("O campo nome não pode estar vazio");
         if (email == null || email.isBlank())
             errors.add("O campo email não pode estar vazio");
-        // verifica se o email contem '@' e '.'
-        if (!email.contains("@") || !email.contains("."))
-            errors.add("Email inválido");
         if (telefone == null || telefone.isBlank())
             errors.add("Telefone não pode estar vazio");
         //verifica se o telefone tem entre 11 á 14 digitos
