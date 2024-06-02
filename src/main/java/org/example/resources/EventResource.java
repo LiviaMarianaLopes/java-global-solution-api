@@ -21,8 +21,8 @@ public class EventResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Event> getAll() {
-        return eventRepository.readAll();
+    public List<Event> getAll(@QueryParam("orderby") String orderBy) {
+        return eventRepository.readAll(orderBy);
     }
 
     @GET

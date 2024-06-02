@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class EventRepository implements Loggable<String>, _BaseRepository<Event> {
+public class EventRepository implements Loggable<String> {
     public static final String ID_COLUMN = "ID";
     public static final String TITULO_COLUMN = "TITULO";
     public static final String DESCRICAO_COLUMN = "DESCRICAO";
@@ -49,7 +49,6 @@ public class EventRepository implements Loggable<String>, _BaseRepository<Event>
         return Optional.empty();
     }
 
-    @Override
     public void create(Event entity) {
         String sql = "INSERT INTO " + TB_NAME + " (%s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?)"
                 .formatted(TITULO_COLUMN, DESCRICAO_COLUMN, DATA_COLUMN, LOCAL_COLUMN, ID_ALERT_COLUMN);
@@ -71,10 +70,10 @@ public class EventRepository implements Loggable<String>, _BaseRepository<Event>
         }
     }
 
-    @Override
-    public List<Event> readAll() {
+
+    public List<Event> readAll(String orderby) {
         List<Event> eventList = new ArrayList<>();
-        String selectAllSQL = "SELECT * FROM " + TB_NAME + " ORDER BY ID";
+        String selectAllSQL = "SELECT * FROM " + TB_NAME + " ORDER BY "+ orderby ;
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectAllSQL)) {
@@ -98,7 +97,6 @@ public class EventRepository implements Loggable<String>, _BaseRepository<Event>
         return eventList;
     }
 
-    @Override
     public void update(int id, Event entity) {
         String updateSQL = "UPDATE " + TB_NAME + " SET %s = ?, %S = ?, %s = ?, %s = ?, %s = ? WHERE id = ?"
                 .formatted(TITULO_COLUMN, DESCRICAO_COLUMN, DATA_COLUMN, LOCAL_COLUMN, ID_ALERT_COLUMN);
@@ -121,7 +119,6 @@ public class EventRepository implements Loggable<String>, _BaseRepository<Event>
         }
     }
 
-    @Override
     public void delete(int id) {
         String deleteSQL = "DELETE FROM " + TB_NAME + " WHERE id = ?";
 
