@@ -2,25 +2,27 @@ package org.example.Repositories;
 
 import org.example.Infrastructure.DatabaseConfig;
 import org.example.entities.Partner;
-import org.example.entities.Volunteer;
-import org.example.utils.Loggable;
+import org.example.Infrastructure.Loggable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 public class PartnerRepository implements _BaseRepository<Partner>, Loggable<String> {
-    public static final String ID_COLUMN = "ID";
-    public static final String NOME_COLUMN = "NOME";
-    public static final String EMAIL_COLUMN = "EMAIL";
-    public static final String TELEFONE_COLUMN = "TELEFONE";
-    public static final String CNPJ_COLUMN = "CNPJ";
-    public static final String INDUSTRIA_COLUMN = "INDUSTRIA";
-    public static final String ID_COLLABORATOR_COLUMN = "ID_COLLABORATOR";
+    public static final HashMap<String, String> COLUMN_TYPE_NAMES = new HashMap<String, String>() {{
+        put("ID_COLUMN", "ID");
+        put("NOME_COLUMN", "NOME");
+        put("EMAIL_COLUMN", "EMAIL");
+        put("TELEFONE_COLUMN", "TELEFONE");
+        put("CNPJ_COLUMN", "CNPJ");
+        put("INDUSTRIA_COLUMN", "INDUSTRIA");
+        put("ID_COLLABORATOR_COLUMN", "ID_COLLABORATOR");
+    }};
     public static final String TB_NAME = "PARTNERS";
 
 
@@ -35,13 +37,13 @@ public class PartnerRepository implements _BaseRepository<Partner>, Loggable<Str
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                return Optional.of(new Partner(rs.getInt(ID_COLUMN),
-                        rs.getString(NOME_COLUMN),
-                        rs.getString(EMAIL_COLUMN),
-                        rs.getString(TELEFONE_COLUMN),
-                        rs.getInt(ID_COLLABORATOR_COLUMN),
-                        rs.getString(CNPJ_COLUMN),
-                        rs.getString(INDUSTRIA_COLUMN)
+                return Optional.of(new Partner(rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("NOME_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("EMAIL_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("TELEFONE_COLUMN")),
+                        rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLLABORATOR_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("CNPJ_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("INDUSTRIA_COLUMN"))
                 ));
             }
 
@@ -60,7 +62,7 @@ public class PartnerRepository implements _BaseRepository<Partner>, Loggable<Str
         if (collaboratorId.isPresent()) {
             // Em seguida, cria o parceiro usando o ID do colaborador
             String sql = "INSERT INTO " + TB_NAME + " (%s, %s, %s) VALUES (?, ?, ?)"
-                    .formatted(ID_COLLABORATOR_COLUMN, CNPJ_COLUMN, INDUSTRIA_COLUMN);
+                    .formatted(COLUMN_TYPE_NAMES.get("ID_COLLABORATOR_COLUMN"), COLUMN_TYPE_NAMES.get("CNPJ_COLUMN"), COLUMN_TYPE_NAMES.get("INDUSTRIA_COLUMN"));
             try (var connection = DatabaseConfig.getConnection();
                  var statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, collaboratorId.get());
@@ -91,13 +93,13 @@ public class PartnerRepository implements _BaseRepository<Partner>, Loggable<Str
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                Partner partner = new Partner(rs.getInt(ID_COLUMN),
-                        rs.getString(NOME_COLUMN),
-                        rs.getString(EMAIL_COLUMN),
-                        rs.getString(TELEFONE_COLUMN),
-                        rs.getInt(ID_COLLABORATOR_COLUMN),
-                        rs.getString(CNPJ_COLUMN),
-                        rs.getString(INDUSTRIA_COLUMN)
+                Partner partner = new Partner(rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("NOME_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("EMAIL_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("TELEFONE_COLUMN")),
+                        rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLLABORATOR_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("CNPJ_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("INDUSTRIA_COLUMN"))
                 );
                 partners.add(partner);
             }

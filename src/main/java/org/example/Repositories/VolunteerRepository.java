@@ -2,24 +2,23 @@ package org.example.Repositories;
 
 import org.example.Infrastructure.DatabaseConfig;
 import org.example.entities.Volunteer;
-import org.example.utils.Loggable;
+import org.example.Infrastructure.Loggable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class VolunteerRepository implements _BaseRepository<Volunteer>, Loggable<String> {
-    public static final String ID_COLUMN = "ID";
-    public static final String NOME_COLUMN = "NOME";
-    public static final String EMAIL_COLUMN = "EMAIL";
-    public static final String TELEFONE_COLUMN = "TELEFONE";
-    public static final String DATA_NASCIMENTO_COLUMN = "DATA_DE_NASCIMENTO";
-
-    public static final String ID_COLLABORATOR_COLUMN = "ID_COLLABORATOR";
+    public static final HashMap<String, String> COLUMN_TYPE_NAMES = new HashMap<String, String>() {{
+        put("ID_COLUMN", "ID");
+        put("NOME_COLUMN", "NOME");
+        put("EMAIL_COLUMN", "EMAIL");
+        put("TELEFONE_COLUMN", "TELEFONE");
+        put("DATA_NASCIMENTO_COLUMN", "DATA_DE_NASCIMENTO");
+        put("ID_COLLABORATOR_COLUMN", "ID_COLLABORATOR");
+    }};
     public static final String TB_NAME = "VOLUNTEERS";
 
 
@@ -49,12 +48,12 @@ public class VolunteerRepository implements _BaseRepository<Volunteer>, Loggable
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                return Optional.of(new Volunteer(rs.getInt(ID_COLUMN),
-                        rs.getString(NOME_COLUMN),
-                        rs.getString(EMAIL_COLUMN),
-                        rs.getString(TELEFONE_COLUMN),
-                        rs.getInt(ID_COLLABORATOR_COLUMN),
-                        rs.getDate(DATA_NASCIMENTO_COLUMN).toLocalDate()
+                return Optional.of(new Volunteer(rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("NOME_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("EMAIL_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("TELEFONE_COLUMN")),
+                    rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLLABORATOR_COLUMN")),
+                        rs.getDate(COLUMN_TYPE_NAMES.get("DATA_NASCIMENTO_COLUMN")).toLocalDate()
                 ));
             }
 
@@ -75,7 +74,7 @@ public class VolunteerRepository implements _BaseRepository<Volunteer>, Loggable
 
             // Em seguida, cria o voluntário usando o ID do colaborador
             String sql = "INSERT INTO " + TB_NAME + " (%s, %s) VALUES (?, TO_DATE(?, 'YYYY-MM-DD'))"
-                    .formatted(ID_COLLABORATOR_COLUMN, DATA_NASCIMENTO_COLUMN);
+                    .formatted(COLUMN_TYPE_NAMES.get("ID_COLLABORATOR_COLUMN"), COLUMN_TYPE_NAMES.get("DATA_NASCIMENTO_COLUMN"));
 
             try (var connection = DatabaseConfig.getConnection();
                  var statement = connection.prepareStatement(sql)) {
@@ -108,12 +107,12 @@ public class VolunteerRepository implements _BaseRepository<Volunteer>, Loggable
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                Volunteer volunteer = new Volunteer(rs.getInt(ID_COLUMN),
-                        rs.getString(NOME_COLUMN),
-                        rs.getString(EMAIL_COLUMN),
-                        rs.getString(TELEFONE_COLUMN),
-                        rs.getInt(ID_COLLABORATOR_COLUMN),
-                        rs.getDate(DATA_NASCIMENTO_COLUMN).toLocalDate()
+                Volunteer volunteer = new Volunteer(rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("NOME_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("EMAIL_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("TELEFONE_COLUMN")),
+                        rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLLABORATOR_COLUMN")),
+                        rs.getDate(COLUMN_TYPE_NAMES.get("DATA_NASCIMENTO_COLUMN")).toLocalDate()
                 );
                 volunterrs.add(volunteer);
             }

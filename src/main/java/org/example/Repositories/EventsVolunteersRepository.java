@@ -2,26 +2,28 @@ package org.example.Repositories;
 
 import org.example.Infrastructure.DatabaseConfig;
 import org.example.entities.EventVolunteer;
-import org.example.utils.Loggable;
+import org.example.Infrastructure.Loggable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class EventsVolunteersRepository implements Loggable<String> {
 
     private static final String TB_NAME = "VS_EVENTS_VOLUNTEERS";
-    private static final String ID_COLUMN = "id";
-
-    private static final String ID_VOLUNTEER_COLUMN = "VS_VOLUNTEER_ID";
-    private static final String ID_EVENT_COLUMN = "VS_EVENT_ID";
+    public static final HashMap<String, String> COLUMN_TYPE_NAMES = new HashMap<String, String>() {{
+        put("ID_COLUMN", "ID");
+        put("ID_VOLUNTEER_COLUMN", "VS_VOLUNTEER_ID");
+        put("ID_EVENT_COLUMN", "VS_EVENT_ID");
+    }};
 
     public void registerVolunteerInEvent(EventVolunteer eventVolunteer) {
         String sql = "INSERT INTO " + TB_NAME + " (%s, %s) VALUES (?, ?)"
-                .formatted(ID_VOLUNTEER_COLUMN, ID_EVENT_COLUMN);
+                .formatted(COLUMN_TYPE_NAMES.get("ID_VOLUNTEER_COLUMN"), COLUMN_TYPE_NAMES.get("ID_EVENT_COLUMN") );
 
         try (Connection connection = DatabaseConfig.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -47,9 +49,9 @@ public class EventsVolunteersRepository implements Loggable<String> {
 
             while (rs.next()) {
                 EventVolunteer eventVolunteer = new EventVolunteer(
-                        rs.getInt(ID_COLUMN),
-                        rs.getInt(ID_VOLUNTEER_COLUMN),
-                        rs.getInt(ID_EVENT_COLUMN));
+                        rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLUMN")),
+                        rs.getInt(COLUMN_TYPE_NAMES.get("ID_VOLUNTEER_COLUMN")),
+                        rs.getInt(COLUMN_TYPE_NAMES.get("ID_EVENT_COLUMN")));
                 eventVolunteerList.add(eventVolunteer);
             }
 

@@ -1,25 +1,27 @@
 package org.example.Repositories;
 
 import org.example.Infrastructure.DatabaseConfig;
-import org.example.entities.Alert;
 import org.example.entities.Collaborator;
-import org.example.utils.Loggable;
+import org.example.Infrastructure.Loggable;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 public class CollaboratorRepository implements Loggable<String> {
-    public static final String ID_COLUMN = "ID";
-    public static final String NOME_COLUMN = "NOME";
-    public static final String EMAIL_COLUMN = "EMAIL";
-    public static final String TELEFONE_COLUMN = "TELEFONE";
+    public static final HashMap<String, String> COLUMN_TYPE_NAMES = new HashMap<String, String>() {{
+        put("ID_COLUMN", "ID");
+        put("NOME_COLUMN", "NOME");
+        put("EMAIL_COLUMN", "EMAIL");
+        put("TELEFONE_COLUMN", "TELEFONE");
+    }};
     public static final String TB_NAME = "COLLABORATOR";
 
     public Optional<Integer> create(Collaborator entity) {
         String sql = "INSERT INTO " + TB_NAME + " (%s, %s, %s) VALUES (?, ?, ?)"
-                .formatted(NOME_COLUMN, EMAIL_COLUMN, TELEFONE_COLUMN);
+                .formatted(COLUMN_TYPE_NAMES.get("NOME_COLUMN"),COLUMN_TYPE_NAMES.get("EMAIL_COLUMN") ,COLUMN_TYPE_NAMES.get("TELEFONE_COLUMN") );
 
         try (var connection = DatabaseConfig.getConnection();
              var statement = connection.prepareStatement(sql)) {
@@ -81,10 +83,10 @@ public class CollaboratorRepository implements Loggable<String> {
 
             while (rs.next()) {
                 Collaborator collaborator = new Collaborator(
-                        rs.getInt(ID_COLUMN),
-                        rs.getString(NOME_COLUMN),
-                        rs.getString(EMAIL_COLUMN),
-                        rs.getString(TELEFONE_COLUMN));
+                        rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("NOME_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("EMAIL_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("TELEFONE_COLUMN")));
                 collaboratorList.add(collaborator);
             }
 

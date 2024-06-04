@@ -2,25 +2,26 @@ package org.example.Repositories;
 
 import org.example.Infrastructure.DatabaseConfig;
 import org.example.entities.Event;
-import org.example.utils.Loggable;
+import org.example.Infrastructure.Loggable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 public class EventRepository implements Loggable<String> {
-    public static final String ID_COLUMN = "ID";
-    public static final String TITULO_COLUMN = "TITULO";
-    public static final String DESCRICAO_COLUMN = "DESCRICAO";
-    public static final String DATA_COLUMN = "DATA";
-
-    public static final String LOCAL_COLUMN = "LOCAL";
-
-    public static final String ID_ALERT_COLUMN = "ID_ALERT";
+    public static final HashMap<String, String> COLUMN_TYPE_NAMES = new HashMap<String, String>() {{
+        put("ID_COLUMN", "ID");
+        put("TITULO_COLUMN", "TITULO");
+        put("DESCRICAO_COLUMN", "DESCRICAO");
+        put("DATA_COLUMN", "DATA");
+        put("LOCAL_COLUMN", "LOCAL");
+        put("ID_ALERT_COLUMN", "ID_ALERT");
+    }};
     public static final String TB_NAME = "VS_EVENTS";
 
     public Optional<Event> getEventById(int id) {
@@ -34,12 +35,12 @@ public class EventRepository implements Loggable<String> {
 
             if (rs.next()) {
                 return Optional.of(new Event(
-                        rs.getInt(ID_COLUMN),
-                        rs.getString(TITULO_COLUMN),
-                        rs.getString(DESCRICAO_COLUMN),
-                        rs.getTimestamp(DATA_COLUMN),
-                        rs.getString(LOCAL_COLUMN),
-                        rs.getInt(ID_ALERT_COLUMN)));
+                        rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("TITULO_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("DESCRICAO_COLUMN")),
+                        rs.getTimestamp(COLUMN_TYPE_NAMES.get("DATA_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("LOCAL_COLUMN")),
+                        rs.getInt(COLUMN_TYPE_NAMES.get("ID_ALERT_COLUMN"))));
             }
 
         } catch (Exception e) {
@@ -51,7 +52,7 @@ public class EventRepository implements Loggable<String> {
 
     public void create(Event entity) {
         String sql = "INSERT INTO " + TB_NAME + " (%s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?)"
-                .formatted(TITULO_COLUMN, DESCRICAO_COLUMN, DATA_COLUMN, LOCAL_COLUMN, ID_ALERT_COLUMN);
+                .formatted(COLUMN_TYPE_NAMES.get("TITULO_COLUMN"), COLUMN_TYPE_NAMES.get("DESCRICAO_COLUMN"), COLUMN_TYPE_NAMES.get("DATA_COLUMN"), COLUMN_TYPE_NAMES.get("LOCAL_COLUMN"), COLUMN_TYPE_NAMES.get("ID_ALERT_COLUMN"));
 
         try (var connection = DatabaseConfig.getConnection();
              var statement = connection.prepareStatement(sql)) {
@@ -82,12 +83,12 @@ public class EventRepository implements Loggable<String> {
 
             while (rs.next()) {
                 Event alert = new Event(
-                        rs.getInt(ID_COLUMN),
-                        rs.getString(TITULO_COLUMN),
-                        rs.getString(DESCRICAO_COLUMN),
-                        rs.getTimestamp(DATA_COLUMN),
-                        rs.getString(LOCAL_COLUMN),
-                        rs.getInt(ID_ALERT_COLUMN));
+                        rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("TITULO_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("DESCRICAO_COLUMN")),
+                        rs.getTimestamp(COLUMN_TYPE_NAMES.get("DATA_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("LOCAL_COLUMN")),
+                        rs.getInt(COLUMN_TYPE_NAMES.get("ID_ALERT_COLUMN")));
                 eventList.add(alert);
             }
 
@@ -99,7 +100,7 @@ public class EventRepository implements Loggable<String> {
 
     public void update(int id, Event entity) {
         String updateSQL = "UPDATE " + TB_NAME + " SET %s = ?, %S = ?, %s = ?, %s = ?, %s = ? WHERE id = ?"
-                .formatted(TITULO_COLUMN, DESCRICAO_COLUMN, DATA_COLUMN, LOCAL_COLUMN, ID_ALERT_COLUMN);
+                .formatted(COLUMN_TYPE_NAMES.get("TITULO_COLUMN"), COLUMN_TYPE_NAMES.get("DESCRICAO_COLUMN"), COLUMN_TYPE_NAMES.get("DATA_COLUMN"), COLUMN_TYPE_NAMES.get("LOCAL_COLUMN"), COLUMN_TYPE_NAMES.get("ID_ALERT_COLUMN"));
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateSQL)) {

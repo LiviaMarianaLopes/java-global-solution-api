@@ -2,25 +2,27 @@ package org.example.Repositories;
 
 import org.example.Infrastructure.DatabaseConfig;
 import org.example.entities.Alert;
-import org.example.entities.Partner;
-import org.example.utils.Loggable;
+import org.example.Infrastructure.Loggable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 
 public class AlertRepository implements Loggable<String>, _BaseRepository<Alert> {
-    public static final String ID_COLUMN = "ID";
-    public static final String CEP_COLUMN = "CEP";
-    public static final String NOME_LOCAL_COLUMN = "NOME_LOCAL";
-    public static final String REFERENCIA_COLUMN = "REFERENCIA";
-    public static final String DESCRICAO_COLUMN = "DESCRICAO";
-    public static final String ID_COLLABORATOR_COLUMN = "ID_COLLABORATOR";
+    public static final HashMap<String, String> COLUMN_TYPE_NAMES = new HashMap<String, String>() {{
+        put("ID_COLUMN", "ID");
+        put("CEP_COLUMN", "CEP");
+        put("NOME_LOCAL_COLUMN", "NOME_LOCAL");
+        put("REFERENCIA_COLUMN", "REFERENCIA");
+        put("DESCRICAO_COLUMN", "DESCRICAO");
+        put("ID_COLLABORATOR_COLUMN", "ID_COLLABORATOR");
+    }};
     public static final String TB_NAME = "VS_ALERTS";
     public Optional<Alert> getAlertById(int id) {
         String selectSQL = "select * FROM VS_ALERTS WHERE ID = ?";
@@ -33,12 +35,12 @@ public class AlertRepository implements Loggable<String>, _BaseRepository<Alert>
 
             if (rs.next()) {
                 return Optional.of(new Alert(
-                        rs.getInt(ID_COLUMN),
-                        rs.getString(CEP_COLUMN),
-                        rs.getString(NOME_LOCAL_COLUMN),
-                        rs.getString(REFERENCIA_COLUMN),
-                        rs.getString(DESCRICAO_COLUMN),
-                        rs.getInt(ID_COLLABORATOR_COLUMN)));
+                        rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("CEP_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("NOME_LOCAL_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("REFERENCIA_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("DESCRICAO_COLUMN")),
+                        rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLLABORATOR_COLUMN"))));
             }
 
         } catch (Exception e) {
@@ -50,7 +52,7 @@ public class AlertRepository implements Loggable<String>, _BaseRepository<Alert>
     @Override
     public void create(Alert entity) {
         String sql = "INSERT INTO " + TB_NAME + " (%s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?)"
-                .formatted(CEP_COLUMN, NOME_LOCAL_COLUMN, REFERENCIA_COLUMN, DESCRICAO_COLUMN, ID_COLLABORATOR_COLUMN);
+                .formatted(COLUMN_TYPE_NAMES.get("CEP_COLUMN"), COLUMN_TYPE_NAMES.get("NOME_LOCAL_COLUMN"), COLUMN_TYPE_NAMES.get("REFERENCIA_COLUMN"), COLUMN_TYPE_NAMES.get("DESCRICAO_COLUMN"), COLUMN_TYPE_NAMES.get("ID_COLLABORATOR_COLUMN"));
 
         try (var connection = DatabaseConfig.getConnection();
              var statement = connection.prepareStatement(sql)) {
@@ -81,12 +83,12 @@ public class AlertRepository implements Loggable<String>, _BaseRepository<Alert>
 
             while (rs.next()) {
                 Alert alert = new Alert(
-                        rs.getInt(ID_COLUMN),
-                        rs.getString(CEP_COLUMN),
-                        rs.getString(NOME_LOCAL_COLUMN),
-                        rs.getString(REFERENCIA_COLUMN),
-                        rs.getString(DESCRICAO_COLUMN),
-                        rs.getInt(ID_COLLABORATOR_COLUMN));
+                        rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("CEP_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("NOME_LOCAL_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("REFERENCIA_COLUMN")),
+                        rs.getString(COLUMN_TYPE_NAMES.get("DESCRICAO_COLUMN")),
+                        rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLLABORATOR_COLUMN")));
                 alertList.add(alert);
             }
 
