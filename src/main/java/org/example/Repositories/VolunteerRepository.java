@@ -17,9 +17,9 @@ public class VolunteerRepository implements _BaseRepository<Volunteer>, Loggable
         put("EMAIL_COLUMN", "EMAIL");
         put("TELEFONE_COLUMN", "TELEFONE");
         put("DATA_NASCIMENTO_COLUMN", "DATA_DE_NASCIMENTO");
-        put("ID_COLLABORATOR_COLUMN", "ID_COLLABORATOR");
+        put("ID_COLLABORATOR_COLUMN", "ID_COLLABORATORS");
     }};
-    public static final String TB_NAME = "VOLUNTEERS";
+    public static final String TB_NAME = "VS_VOLUNTEERS";
 
 
     public int getIdVolunteer(String email) {
@@ -37,11 +37,18 @@ public class VolunteerRepository implements _BaseRepository<Volunteer>, Loggable
     @Override
 
     public Optional<Volunteer> getById(int id) {
-        String selectSQL = "select v.id, nome, email, telefone, data_de_nascimento, id_collaborator\n" +
-                "from volunteers v\n" +
-                "inner join collaborator c\n" +
-                "on v.id_collaborator = c.id\n" +
-                "where v.id = ?";
+        String selectSQL = "SELECT v.ID," +
+                " v.DATA_DE_NASCIMENTO," +
+                " c.ID AS ID_COLLABORATORS," +
+                " c.NOME," +
+                " c.EMAIL," +
+                " c.TELEFONE" +
+                " FROM" +
+                " VS_VOLUNTEERS V" +
+                " JOIN" +
+                " VS_COLLABORATORS c" +
+                " ON" +
+                " v.ID_COLLABORATORS = c.ID WHERE V.ID = ?";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
@@ -98,10 +105,19 @@ public class VolunteerRepository implements _BaseRepository<Volunteer>, Loggable
     @Override
     public List<Volunteer> readAll() {
         List<Volunteer> volunterrs = new ArrayList<>();
-        String selectAllSQL = "select v.id, data_de_nascimento, id_collaborator, nome, email, telefone\n" +
-                "from volunteers v\n" +
-                "inner join collaborator c\n" +
-                "on v.id_collaborator = c.id";
+        String selectAllSQL = "SELECT \n" +
+                "    v.ID,\n" +
+                "    v.DATA_DE_NASCIMENTO,\n" +
+                "    c.ID AS ID_COLLABORATORS,\n" +
+                "    c.NOME,\n" +
+                "    c.EMAIL,\n" +
+                "    c.TELEFONE\n" +
+                "FROM \n" +
+                "    VS_VOLUNTEERS v\n" +
+                "JOIN \n" +
+                "    VS_COLLABORATORS c\n" +
+                "ON \n" +
+                "    v.ID_COLLABORATORS = c.ID";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectAllSQL)) {

@@ -18,7 +18,7 @@ public class EventsVolunteersService {
             eventsVolunteersRepository.registerVolunteerInEvent(eventVolunteer);
         }
         else{
-            throw new IllegalArgumentException("Email inválido");
+            throw new IllegalArgumentException("Email não cadastrado");
         }
     }
 }

@@ -17,7 +17,7 @@ public class CollaboratorRepository implements Loggable<String> {
         put("EMAIL_COLUMN", "EMAIL");
         put("TELEFONE_COLUMN", "TELEFONE");
     }};
-    public static final String TB_NAME = "COLLABORATOR";
+    public static final String TB_NAME = "VS_COLLABORATORS";
 
     public Optional<Integer> create(Collaborator entity) {
         String sql = "INSERT INTO " + TB_NAME + " (%s, %s, %s) VALUES (?, ?, ?)"

@@ -17,8 +17,8 @@ public class EventsVolunteersRepository implements Loggable<String> {
     private static final String TB_NAME = "VS_EVENTS_VOLUNTEERS";
     public static final HashMap<String, String> COLUMN_TYPE_NAMES = new HashMap<String, String>() {{
         put("ID_COLUMN", "ID");
-        put("ID_VOLUNTEER_COLUMN", "VS_VOLUNTEER_ID");
-        put("ID_EVENT_COLUMN", "VS_EVENT_ID");
+        put("ID_VOLUNTEER_COLUMN", "ID_VOLUNTEERS");
+        put("ID_EVENT_COLUMN", "ID_EVENTS");
     }};
 
     public void registerVolunteerInEvent(EventVolunteer eventVolunteer) {

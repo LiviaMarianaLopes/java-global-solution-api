@@ -22,7 +22,7 @@ public class Localizacaorepository implements Loggable<String> {
         put("LOGRADOURO_COLUMN", "LOGRADOURO");
         put("REFERENCIA_COLUMN", "REFERENCIA");
     }};
-    public static final String TB_NAME = "LOCALIZACAO";
+    public static final String TB_NAME = "VS_LOCATION";
 
     public Optional<Integer> create(Localizacao entity) {
         String sql = "INSERT INTO " + TB_NAME + " (%s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?)"

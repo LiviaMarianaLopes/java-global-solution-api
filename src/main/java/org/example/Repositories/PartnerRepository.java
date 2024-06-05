@@ -20,14 +20,25 @@ public class PartnerRepository implements _BaseRepository<Partner>, Loggable<Str
         put("EMAIL_COLUMN", "EMAIL");
         put("TELEFONE_COLUMN", "TELEFONE");
         put("CNPJ_COLUMN", "CNPJ");
-        put("ID_COLLABORATOR_COLUMN", "ID_COLLABORATOR");
+        put("ID_COLLABORATOR_COLUMN", "ID_COLLABORATORS");
     }};
-    public static final String TB_NAME = "PARTNERS";
+    public static final String TB_NAME = "VS_PARTNERS";
 
     @Override
     public Optional<Partner> getById(int id) {
-        String selectSQL = "select P.id, nome, email, telefone, id_collaborator, CNPJ" +
-                " from PARTNERS P inner join collaborator c on P.id_collaborator = c.id WHERE P.ID = ?";
+        String selectSQL = "SELECT \n" +
+                "    p.ID,\n" +
+                "    p.CNPJ,\n" +
+                "    c.ID AS ID_COLLABORATORS,\n" +
+                "    c.NOME,\n" +
+                "    c.EMAIL,\n" +
+                "    c.TELEFONE\n" +
+                "FROM \n" +
+                "    VS_PARTNERS P\n" +
+                "JOIN \n" +
+                "    VS_COLLABORATORS c\n" +
+                "ON \n" +
+                "    P.ID_COLLABORATORS = c.ID WHERE P.ID = ?";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
@@ -79,10 +90,19 @@ public class PartnerRepository implements _BaseRepository<Partner>, Loggable<Str
     @Override
     public List<Partner> readAll() {
         List<Partner> partners = new ArrayList<>();
-        String selectAllSQL = "select P.id, nome, email, telefone, id_collaborator, CNPJ\n" +
-                "from PARTNERS P\n" +
-                "inner join collaborator c\n" +
-                "on P.id_collaborator = c.id";
+        String selectAllSQL = "SELECT \n" +
+                "    p.ID,\n" +
+                "    p.CNPJ,\n" +
+                "    c.ID AS ID_COLLABORATORS,\n" +
+                "    c.NOME,\n" +
+                "    c.EMAIL,\n" +
+                "    c.TELEFONE\n" +
+                "FROM \n" +
+                "    VS_PARTNERS P\n" +
+                "JOIN \n" +
+                "    VS_COLLABORATORS c\n" +
+                "ON \n" +
+                "    P.ID_COLLABORATORS = c.ID";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectAllSQL)) {

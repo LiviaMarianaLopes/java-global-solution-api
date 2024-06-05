@@ -23,17 +23,17 @@ public class AlertRepository implements Loggable<String>, _BaseRepository<Alert>
         put("LOGRADOURO_COLUMN", "LOGRADOURO");
         put("REFERENCIA_COLUMN", "REFERENCIA");
         put("DESCRICAO_COLUMN", "DESCRICAO");
-        put("ID_LOCALIZACAO_COLUMN", "ID_LOCALIZACAO");
-        put("ID_COLLABORATOR_COLUMN", "ID_COLLABORATOR");
+        put("ID_LOCALIZACAO_COLUMN", "ID_LOCATION");
+        put("ID_COLLABORATOR_COLUMN", "ID_COLLABORATORS");
     }};
     public static final String TB_NAME = "VS_ALERTS";
 
     @Override
     public Optional<Alert> getById(int id) {
-        String selectSQL = " SELECT A.ID, CEP, ESTADO, CIDADE, LOGRADOURO, REFERENCIA, DESCRICAO, ID_LOCALIZACAO, ID_COLLABORATOR\n" +
+        String selectSQL = " SELECT A.ID, CEP, ESTADO, CIDADE, LOGRADOURO, REFERENCIA, DESCRICAO, ID_LOCATION, ID_COLLABORATORS\n" +
                 " FROM VS_ALERTS A\n" +
-                " INNER JOIN LOCALIZACAO L\n" +
-                " ON A.ID_LOCALIZACAO = L.ID\n" +
+                " INNER JOIN VS_LOCATION L\n" +
+                " ON A.ID_LOCATION = L.ID\n" +
                 " WHERE A.ID = ?";
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -92,10 +92,10 @@ public class AlertRepository implements Loggable<String>, _BaseRepository<Alert>
     @Override
     public List<Alert> readAll() {
         List<Alert> alertList = new ArrayList<>();
-        String selectAllSQL = " SELECT A.ID, CEP, ESTADO, CIDADE, LOGRADOURO, REFERENCIA, DESCRICAO, ID_LOCALIZACAO, ID_COLLABORATOR\n" +
+        String selectAllSQL = " SELECT A.ID, CEP, ESTADO, CIDADE, LOGRADOURO, REFERENCIA, DESCRICAO, ID_LOCATION, ID_COLLABORATORS\n" +
                 " FROM VS_ALERTS A\n" +
-                " INNER JOIN LOCALIZACAO L\n" +
-                " ON A.ID_LOCALIZACAO = L.ID";
+                " INNER JOIN VS_LOCATION L\n" +
+                " ON A.ID_LOCATION = L.ID";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectAllSQL)) {
@@ -175,7 +175,7 @@ public class AlertRepository implements Loggable<String>, _BaseRepository<Alert>
     }
 
     public Optional<Integer> getId(Alert entity, Optional<Integer> localizacaoId) {
-        StringBuilder selectSQL = new StringBuilder("SELECT ID FROM " + TB_NAME + " WHERE ID_LOCALIZACAO = ? AND ID_COLLABORATOR = ?");
+        StringBuilder selectSQL = new StringBuilder("SELECT ID FROM " + TB_NAME + " WHERE ID_LOCATION = ? AND ID_COLLABORATORS = ?");
         List<Object> values = new ArrayList<>();
 
         // Adicionando o valor de localizacaoId desempacotado

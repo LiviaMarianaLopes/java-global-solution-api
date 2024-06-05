@@ -28,7 +28,7 @@ public class EventRepository implements Loggable<String> {
         put("TITULO_COLUMN", "TITULO");
         put("DESCRICAO_COLUMN", "DESCRICAO");
         put("DATA_COLUMN", "DATA");
-        put("ID_ALERT_COLUMN", "ID_ALERT");
+        put("ID_ALERT_COLUMN", "ID_ALERTS");
     }};
     public static final String TB_NAME = "VS_EVENTS";
 
@@ -38,8 +38,8 @@ public class EventRepository implements Loggable<String> {
                 "    ve.titulo,\n" +
                 "    ve.descricao,\n" +
                 "    ve.data,\n" +
-                "    va.id AS id_alert,\n" +
-                "    va.id_collaborator AS id_collaborator,\n" +
+                "    va.id AS id_alerts,\n" +
+                "    va.id_collaborators AS id_collaborator,\n" +
                 "    va.descricao AS alert_descricao,\n" +
                 "    l.id AS id_localizacao,\n" +
                 "    l.cep,\n" +
@@ -50,9 +50,9 @@ public class EventRepository implements Loggable<String> {
                 "FROM \n" +
                 "    vs_events ve\n" +
                 "JOIN \n" +
-                "    vs_alerts va ON ve.id_alert = va.id\n" +
+                "    vs_alerts va ON ve.id_alerts = va.id\n" +
                 "JOIN \n" +
-                "    localizacao l ON va.id_localizacao = l.id " +
+                "    VS_LOCATION l ON va.ID_LOCATION = l.id " +
                 "WHERE ve.id = ? ";
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -120,8 +120,8 @@ public class EventRepository implements Loggable<String> {
                 "    ve.titulo,\n" +
                 "    ve.descricao,\n" +
                 "    ve.data,\n" +
-                "    va.id AS id_alert,\n" +
-                "    va.id_collaborator AS id_collaborator,\n" +
+                "    va.id AS id_alerts,\n" +
+                "    va.id_collaborators AS id_collaborator,\n" +
                 "    va.descricao AS alert_descricao,\n" +
                 "    l.id AS id_localizacao,\n" +
                 "    l.cep,\n" +
@@ -132,9 +132,9 @@ public class EventRepository implements Loggable<String> {
                 "FROM \n" +
                 "    vs_events ve\n" +
                 "JOIN \n" +
-                "    vs_alerts va ON ve.id_alert = va.id\n" +
+                "    vs_alerts va ON ve.id_alerts = va.id\n" +
                 "JOIN \n" +
-                "    localizacao l ON va.id_localizacao = l.id ORDER BY " + orderby;
+                "    VS_LOCATION l ON va.ID_LOCATION = l.id ORDER BY " + orderby;
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectAllSQL)) {
@@ -142,7 +142,6 @@ public class EventRepository implements Loggable<String> {
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                System.out.println(rs);
                 Event alert = new Event(
                         rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLUMN")),
                         rs.getString(COLUMN_TYPE_NAMES.get("CEP_COLUMN")),
