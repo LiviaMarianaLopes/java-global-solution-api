@@ -33,7 +33,7 @@ public class AlertResource {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("id") int id) {
-        var user = alertRepository.getAlertById(id);
+        var user = alertRepository.getById(id);
         return user.isPresent() ?
                 Response.ok(user.get()).build() :
                 Response.status(Response.Status.NOT_FOUND).build();

@@ -6,21 +6,19 @@ import java.util.StringJoiner;
 
 public class Partner extends Collaborator {
     private String cnpj;
-    private String industria;
 
     public Partner() {
     }
 
-    public Partner(int id, String nome, String email, String telefone, String cnpj, String industria) {
+    public Partner(int id, String nome, String email, String telefone, String cnpj) {
         super(id, nome, email, telefone);
         this.cnpj = cnpj;
-        this.industria = industria;
+
     }
 
-    public Partner(int id, String nome, String email, String telefone, int idCollaborator, String cnpj, String industria) {
+    public Partner(int id, String nome, String email, String telefone, int idCollaborator, String cnpj) {
         super(id, nome, email, telefone, idCollaborator);
         this.cnpj = cnpj;
-        this.industria = industria;
     }
 
     public String getCnpj() {
@@ -29,14 +27,6 @@ public class Partner extends Collaborator {
 
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
-    }
-
-    public String getIndustria() {
-        return industria;
-    }
-
-    public void setIndustria(String industria) {
-        this.industria = industria;
     }
 
     @Override
@@ -58,7 +48,6 @@ public class Partner extends Collaborator {
     public String toString() {
         return new StringJoiner(", ", Partner.class.getSimpleName() + "[", "]")
                 .add("cnpj='" + cnpj + "'")
-                .add("industria='" + industria + "'")
                 .toString();
     }
 }

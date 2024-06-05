@@ -31,7 +31,7 @@ public class VolunteerResource {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("id") int id) {
-        var volunteer = volunteerRepository.getVolunteerById(id);
+        var volunteer = volunteerRepository.getById(id);
         return volunteer.isPresent() ?
                 Response.ok(volunteer.get()).build() :
                 Response.status(Response.Status.NOT_FOUND).build();

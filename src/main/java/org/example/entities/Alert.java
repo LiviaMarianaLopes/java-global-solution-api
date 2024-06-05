@@ -1,59 +1,39 @@
 package org.example.entities;
 
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.Optional;
 import java.util.StringJoiner;
 
-public class Alert extends _BaseEntity {
+public class Alert extends Localizacao {
 
-    private String cep;
-    private String nomeLocal;
-    private String referencia;
     private String descricao;
+    private int idLocalizacao;
     private int idColaborador;
 
     public Alert() {
     }
 
-    public Alert(int id, String cep, String nomeLocal, String referencia, String descricao, int idColaborador) {
-        super(id);
-        this.cep = cep;
-        this.nomeLocal = nomeLocal;
-        this.referencia = referencia;
+    public Alert(int id, String cep, String estado, String cidade, String logradouro, String referencia, String descricao, int idLocalizacao, int idColaborador) {
+        super(id, cep, estado, cidade, logradouro, referencia);
         this.descricao = descricao;
+        this.idLocalizacao = idLocalizacao;
         this.idColaborador = idColaborador;
     }
 
-    public int getIdColaborador() {
-        return idColaborador;
+    public Alert(int id, String cep, String estado, String cidade, String logradouro, String referencia) {
+        super(id, cep, estado, cidade, logradouro, referencia);
     }
 
-    public void setIdColaborador(int idColaborador) {
+    public Alert(int id, String descricao, int idLocalizacao, int idColaborador) {
+        super(id);
+        this.descricao = descricao;
+        this.idLocalizacao = idLocalizacao;
         this.idColaborador = idColaborador;
     }
 
-    public String getCep() {
-        return cep;
-    }
-
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
-
-    public String getNomeLocal() {
-        return nomeLocal;
-    }
-
-    public void setNomeLocal(String nomeLocal) {
-        this.nomeLocal = nomeLocal;
-    }
-
-    public String getReferencia() {
-        return referencia;
-    }
-
-    public void setReferencia(String referencia) {
-        this.referencia = referencia;
+    public Alert(String descricao, int idLocalizacao, int idColaborador) {
+        this.descricao = descricao;
+        this.idLocalizacao = idLocalizacao;
+        this.idColaborador = idColaborador;
     }
 
     public String getDescricao() {
@@ -64,29 +44,27 @@ public class Alert extends _BaseEntity {
         this.descricao = descricao;
     }
 
-    public Map<Boolean, ArrayList<String>> validate() {
-        var errors = new ArrayList<String>();
-        if (nomeLocal == null || nomeLocal.isBlank())
-            errors.add("O campo nome do local não pode estar vazio");
-        if (cep == null || cep.isBlank())
-            errors.add("CEP não pode estar vazio");
-        if (cep.length() < 8 || cep.length() > 9)
-            errors.add("CEP inválido");
-        if (idColaborador < 1) {
-            errors.add("Id do colaborador esta inválido");
-        }
-        return !errors.isEmpty() ?
-                Map.of(false, errors) :
-                Map.of(true, errors);
+    public int getIdColaborador() {
+        return idColaborador;
+    }
+
+    public int getIdLocalizacao() {
+        return idLocalizacao;
+    }
+
+    public void setIdLocalizacao(int idLocalizacao) {
+        this.idLocalizacao = idLocalizacao;
+    }
+
+    public void setIdColaborador(int idColaborador) {
+        this.idColaborador = idColaborador;
     }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", Alert.class.getSimpleName() + "[", "]")
-                .add("cep='" + cep + "'")
-                .add("nomeLocal='" + nomeLocal + "'")
-                .add("referencia='" + referencia + "'")
                 .add("descricao='" + descricao + "'")
+                .add("idLocalizacao=" + idLocalizacao)
                 .add("idColaborador=" + idColaborador)
                 .toString();
     }

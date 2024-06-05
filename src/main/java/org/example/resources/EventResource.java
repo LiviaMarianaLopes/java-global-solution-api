@@ -29,7 +29,7 @@ public class EventResource {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("id") int id) {
-        var event = eventRepository.getEventById(id);
+        var event = eventRepository.getById(id);
         return event.isPresent() ?
                 Response.ok(event.get()).build() :
                 Response.status(Response.Status.NOT_FOUND).build();

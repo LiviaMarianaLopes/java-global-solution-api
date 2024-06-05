@@ -32,7 +32,7 @@ public class PartnerResource {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("id") int id) {
-        var partner = partnerRepository.getPartenerById(id);
+        var partner = partnerRepository.getById(id);
         return partner.isPresent() ?
                 Response.ok(partner.get()).build() :
                 Response.status(Response.Status.NOT_FOUND).build();

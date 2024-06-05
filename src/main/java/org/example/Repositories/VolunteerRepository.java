@@ -34,7 +34,9 @@ public class VolunteerRepository implements _BaseRepository<Volunteer>, Loggable
         return 0;
     }
 
-    public Optional<Volunteer> getVolunteerById(int id) {
+    @Override
+
+    public Optional<Volunteer> getById(int id) {
         String selectSQL = "select v.id, nome, email, telefone, data_de_nascimento, id_collaborator\n" +
                 "from volunteers v\n" +
                 "inner join collaborator c\n" +
@@ -52,7 +54,7 @@ public class VolunteerRepository implements _BaseRepository<Volunteer>, Loggable
                         rs.getString(COLUMN_TYPE_NAMES.get("NOME_COLUMN")),
                         rs.getString(COLUMN_TYPE_NAMES.get("EMAIL_COLUMN")),
                         rs.getString(COLUMN_TYPE_NAMES.get("TELEFONE_COLUMN")),
-                    rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLLABORATOR_COLUMN")),
+                        rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLLABORATOR_COLUMN")),
                         rs.getDate(COLUMN_TYPE_NAMES.get("DATA_NASCIMENTO_COLUMN")).toLocalDate()
                 ));
             }
@@ -125,7 +127,7 @@ public class VolunteerRepository implements _BaseRepository<Volunteer>, Loggable
 
     @Override
     public void update(int id, Volunteer entity) {
-        Optional<Volunteer> volunteer = getVolunteerById(id);
+        Optional<Volunteer> volunteer = getById(id);
         if (volunteer.isPresent()) {
             CollaboratorRepository collaboratorRepository = new CollaboratorRepository();
             collaboratorRepository.update(volunteer.get().getIdCollaborator(),
@@ -155,7 +157,7 @@ public class VolunteerRepository implements _BaseRepository<Volunteer>, Loggable
 
     @Override
     public void delete(int id) {
-        Optional<Volunteer> volunteer = getVolunteerById(id);
+        Optional<Volunteer> volunteer = getById(id);
         if (volunteer.isPresent()) {
             String deleteSQL = "DELETE FROM " + TB_NAME + " WHERE id = ?";
 

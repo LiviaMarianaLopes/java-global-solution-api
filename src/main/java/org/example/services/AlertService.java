@@ -6,7 +6,11 @@ import org.example.Repositories.CollaboratorRepository;
 import org.example.entities.Alert;
 import org.example.entities.Collaborator;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -25,7 +29,8 @@ public class AlertService {
     public void create(Alert alert) throws IOException, InterruptedException {
 
         if (idCollaboratorValidate(alert)) {
-            cepValidate(alert.getCep());
+            if (alert.getCep() != null && !alert.getCep().isEmpty())
+                cepValidate(alert.getCep());
             var validation = alert.validate();
             if (validation.containsKey(false))
                 throw new IllegalArgumentException(validation.get(false).toString());
@@ -40,7 +45,8 @@ public class AlertService {
     public void update(int id, Alert alert) throws IOException, InterruptedException {
 
         if (idCollaboratorValidate(alert)) {
-            cepValidate(alert.getCep());
+            if (alert.getCep() != null && !alert.getCep().isEmpty())
+                cepValidate(alert.getCep());
             var validation = alert.validate();
             if (validation.containsKey(false))
                 throw new IllegalArgumentException(validation.get(false).toString());
@@ -50,7 +56,8 @@ public class AlertService {
             throw new IllegalArgumentException("ID do colaborador inválido");
         }
     }
-    public boolean idCollaboratorValidate(Alert alert){
+
+    public boolean idCollaboratorValidate(Alert alert) {
         var collaborators = collaboratorRepository.readAll();
         for (Collaborator c : collaborators) {
             if (c.getId() == alert.getIdColaborador()) {
@@ -60,7 +67,7 @@ public class AlertService {
         return false;
     }
 
-    public  boolean cepValidate(String cep) throws IOException, InterruptedException {
+    public boolean cepValidate(String cep) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(String.format(VIACEP_URL, cep)))
@@ -69,9 +76,19 @@ public class AlertService {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 200) {
-            return true;
+            try (JsonReader jsonReader = Json.createReader(new StringReader(response.body()))) {
+                JsonObject jsonObject = jsonReader.readObject();
+
+                // Verifica se o json obtido contém a chave "erro"
+                if (jsonObject.containsKey("erro")) {
+                    throw new IllegalArgumentException("CEP inválido");
+                } else {
+                    return true;
+                }
+            }
         } else {
             throw new IllegalArgumentException("CEP inválido");
         }
     }
+
 }

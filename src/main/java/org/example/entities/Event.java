@@ -5,22 +5,28 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.StringJoiner;
 
-public class Event extends _BaseEntity{
+public class Event extends Alert {
     private String titulo;
-    private String descricao;
+    private String descricaoEvento;
     private Timestamp data;
-    private String local;
     private int idAlerta;
 
     public Event() {
     }
 
-    public Event(int id, String titulo, String descricao, Timestamp data, String local, int idAlerta) {
-        super(id);
+    public Event(int id, String cep, String estado, String cidade, String logradouro, String referencia, String descricao, int idLocalizacao, int idColaborador, String titulo, String descricaoEvento, Timestamp data, int idAlerta) {
+        super(id, cep, estado, cidade, logradouro, referencia, descricao, idLocalizacao, idColaborador);
         this.titulo = titulo;
-        this.descricao = descricao;
+        this.descricaoEvento = descricaoEvento;
         this.data = data;
-        this.local = local;
+        this.idAlerta = idAlerta;
+    }
+
+    public Event(int id, String cep, String estado, String cidade, String logradouro, String referencia, String titulo, String descricaoEvento, Timestamp data, int idAlerta) {
+        super(id, cep, estado, cidade, logradouro, referencia);
+        this.titulo = titulo;
+        this.descricaoEvento = descricaoEvento;
+        this.data = data;
         this.idAlerta = idAlerta;
     }
 
@@ -33,11 +39,11 @@ public class Event extends _BaseEntity{
     }
 
     public String getDescricao() {
-        return descricao;
+        return descricaoEvento;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDescricao(String descricaoEvento) {
+        this.descricaoEvento = descricaoEvento;
     }
 
     public Timestamp getData() {
@@ -52,28 +58,16 @@ public class Event extends _BaseEntity{
         return idAlerta;
     }
 
-    public String getLocal() {
-        return local;
-    }
-
-    public void setLocal(String local) {
-        this.local = local;
-    }
-
     public void setIdAlerta(int idAlerta) {
         this.idAlerta = idAlerta;
     }
+
     public Map<Boolean, ArrayList<String>> validate() {
         var errors = new ArrayList<String>();
         if (titulo == null || titulo.isBlank())
             errors.add("O campo título não pode estar vazio");
-        if (local == null || local.isBlank())
-            errors.add("Local não pode estar vazio");
         if (data == null)
             errors.add("Data do evento não pode ser null");
-        if (idAlerta < 1) {
-            errors.add("Id do alerta esta inválido");
-        }
         return !errors.isEmpty() ?
                 Map.of(false, errors) :
                 Map.of(true, errors);
@@ -83,9 +77,8 @@ public class Event extends _BaseEntity{
     public String toString() {
         return new StringJoiner(", ", Event.class.getSimpleName() + "[", "]")
                 .add("titulo='" + titulo + "'")
-                .add("descricao='" + descricao + "'")
+                .add("descricaoEvento='" + descricaoEvento + "'")
                 .add("data=" + data)
-                .add("local='" + local + "'")
                 .add("idAlerta=" + idAlerta)
                 .toString();
     }

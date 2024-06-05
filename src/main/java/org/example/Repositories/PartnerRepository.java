@@ -20,14 +20,13 @@ public class PartnerRepository implements _BaseRepository<Partner>, Loggable<Str
         put("EMAIL_COLUMN", "EMAIL");
         put("TELEFONE_COLUMN", "TELEFONE");
         put("CNPJ_COLUMN", "CNPJ");
-        put("INDUSTRIA_COLUMN", "INDUSTRIA");
         put("ID_COLLABORATOR_COLUMN", "ID_COLLABORATOR");
     }};
     public static final String TB_NAME = "PARTNERS";
 
-
-    public Optional<Partner> getPartenerById(int id) {
-        String selectSQL = "select P.id, nome, email, telefone, id_collaborator, CNPJ, INDUSTRIA" +
+    @Override
+    public Optional<Partner> getById(int id) {
+        String selectSQL = "select P.id, nome, email, telefone, id_collaborator, CNPJ" +
                 " from PARTNERS P inner join collaborator c on P.id_collaborator = c.id WHERE P.ID = ?";
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -42,8 +41,7 @@ public class PartnerRepository implements _BaseRepository<Partner>, Loggable<Str
                         rs.getString(COLUMN_TYPE_NAMES.get("EMAIL_COLUMN")),
                         rs.getString(COLUMN_TYPE_NAMES.get("TELEFONE_COLUMN")),
                         rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLLABORATOR_COLUMN")),
-                        rs.getString(COLUMN_TYPE_NAMES.get("CNPJ_COLUMN")),
-                        rs.getString(COLUMN_TYPE_NAMES.get("INDUSTRIA_COLUMN"))
+                        rs.getString(COLUMN_TYPE_NAMES.get("CNPJ_COLUMN"))
                 ));
             }
 
@@ -61,13 +59,12 @@ public class PartnerRepository implements _BaseRepository<Partner>, Loggable<Str
         Optional<Integer> collaboratorId = collaboratorRepository.create(entity);
         if (collaboratorId.isPresent()) {
             // Em seguida, cria o parceiro usando o ID do colaborador
-            String sql = "INSERT INTO " + TB_NAME + " (%s, %s, %s) VALUES (?, ?, ?)"
-                    .formatted(COLUMN_TYPE_NAMES.get("ID_COLLABORATOR_COLUMN"), COLUMN_TYPE_NAMES.get("CNPJ_COLUMN"), COLUMN_TYPE_NAMES.get("INDUSTRIA_COLUMN"));
+            String sql = "INSERT INTO " + TB_NAME + " (%s, %s) VALUES (?, ?)"
+                    .formatted(COLUMN_TYPE_NAMES.get("ID_COLLABORATOR_COLUMN"), COLUMN_TYPE_NAMES.get("CNPJ_COLUMN"));
             try (var connection = DatabaseConfig.getConnection();
                  var statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, collaboratorId.get());
                 statement.setString(2, entity.getCnpj());
-                statement.setString(3, entity.getIndustria());
                 int result = statement.executeUpdate();
                 logInfo("Insert realizado com sucesso, linhas afetadas: " + result);
             } catch (SQLException e) {
@@ -82,7 +79,7 @@ public class PartnerRepository implements _BaseRepository<Partner>, Loggable<Str
     @Override
     public List<Partner> readAll() {
         List<Partner> partners = new ArrayList<>();
-        String selectAllSQL = "select P.id, nome, email, telefone, id_collaborator, CNPJ, INDUSTRIA\n" +
+        String selectAllSQL = "select P.id, nome, email, telefone, id_collaborator, CNPJ\n" +
                 "from PARTNERS P\n" +
                 "inner join collaborator c\n" +
                 "on P.id_collaborator = c.id";
@@ -98,8 +95,7 @@ public class PartnerRepository implements _BaseRepository<Partner>, Loggable<Str
                         rs.getString(COLUMN_TYPE_NAMES.get("EMAIL_COLUMN")),
                         rs.getString(COLUMN_TYPE_NAMES.get("TELEFONE_COLUMN")),
                         rs.getInt(COLUMN_TYPE_NAMES.get("ID_COLLABORATOR_COLUMN")),
-                        rs.getString(COLUMN_TYPE_NAMES.get("CNPJ_COLUMN")),
-                        rs.getString(COLUMN_TYPE_NAMES.get("INDUSTRIA_COLUMN"))
+                        rs.getString(COLUMN_TYPE_NAMES.get("CNPJ_COLUMN"))
                 );
                 partners.add(partner);
             }
@@ -112,20 +108,19 @@ public class PartnerRepository implements _BaseRepository<Partner>, Loggable<Str
 
     @Override
     public void update(int id, Partner entity) {
-        Optional<Partner> partner = getPartenerById(id);
+        Optional<Partner> partner = getById(id);
         if (partner.isPresent()) {
             CollaboratorRepository collaboratorRepository = new CollaboratorRepository();
             collaboratorRepository.update(partner.get().getIdCollaborator(),
                     entity);
 
             String updateSQL = "UPDATE " + TB_NAME +
-                    " SET CNPJ = ?, INDUSTRIA = ? WHERE id = ?";
+                    " SET CNPJ = ? WHERE id = ?";
 
             try (Connection conn = DatabaseConfig.getConnection();
                  PreparedStatement pstmt = conn.prepareStatement(updateSQL)) {
                 pstmt.setString(1, entity.getCnpj());
-                pstmt.setString(2, entity.getIndustria());
-                pstmt.setInt(3, id);
+                pstmt.setInt(2, id);
 
                 pstmt.executeUpdate();
                 logInfo("Parceiro atualizado com sucesso!");
@@ -142,7 +137,7 @@ public class PartnerRepository implements _BaseRepository<Partner>, Loggable<Str
 
     @Override
     public void delete(int id) {
-        Optional<Partner> partner = getPartenerById(id);
+        Optional<Partner> partner = getById(id);
         if (partner.isPresent()) {
             String deleteSQL = "DELETE FROM " + TB_NAME + " WHERE id = ?";
 
