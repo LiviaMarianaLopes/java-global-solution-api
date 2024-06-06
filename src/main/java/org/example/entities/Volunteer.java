@@ -1,11 +1,14 @@
 package org.example.entities;
 
+import jakarta.json.bind.annotation.JsonbDateFormat;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.StringJoiner;
 
 public class Volunteer extends Collaborator {
+    @JsonbDateFormat("yyyy-MM-dd")
     private LocalDate dataDeNascimento;
 
     public Volunteer() {

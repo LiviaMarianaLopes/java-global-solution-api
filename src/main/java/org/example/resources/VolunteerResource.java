@@ -41,6 +41,10 @@ public class VolunteerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(Volunteer volunteer) {
         try {
+            String date = volunteer.getDataDeNascimento().toString();
+            if (date == null || date.isEmpty()) {
+                throw new IllegalArgumentException("A data de nascimento não pode estar vazia.");
+            }
             volunteerService.create(volunteer);
             return Response.status(Response.Status.CREATED).entity("Cadastro realizado com sucesso!").build();
         } catch (IllegalArgumentException e) {

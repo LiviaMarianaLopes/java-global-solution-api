@@ -62,8 +62,12 @@ public class Event extends Alert {
         this.idAlerta = idAlerta;
     }
 
+    @Override
     public Map<Boolean, ArrayList<String>> validate() {
-        var errors = new ArrayList<String>();
+        ArrayList<String> errors = new ArrayList<>();
+        if (super.validate().containsKey(false)) {
+            errors.addAll(super.validate().get(false));
+        }
         if (titulo == null || titulo.isBlank())
             errors.add("O campo título não pode estar vazio");
         if (data == null)

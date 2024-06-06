@@ -1,5 +1,7 @@
 package org.example.entities;
 
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Optional;
 import java.util.StringJoiner;
 
@@ -58,6 +60,19 @@ public class Alert extends Localizacao {
 
     public void setIdColaborador(int idColaborador) {
         this.idColaborador = idColaborador;
+    }
+
+    @Override
+    public Map<Boolean, ArrayList<String>> validate() {
+        ArrayList<String> errors = new ArrayList<>();
+        if (super.validate().containsKey(false)) {
+            errors.addAll(super.validate().get(false));
+        }
+        if (descricao == null || descricao.isBlank())
+            errors.add("Descrição pode estar vazia");
+        return !errors.isEmpty() ?
+                Map.of(false, errors) :
+                Map.of(true, errors);
     }
 
     @Override
