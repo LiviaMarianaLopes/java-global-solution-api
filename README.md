@@ -1,4 +1,4 @@
-# API VitaliSea
+# API VitaliSea 🌊
 
 ## Descrição
 A API da Vitalisea foi desenvolvida para apoiar a missão da organização de proteger os oceanos através da facilitação de práticas sustentáveis e da preservação do meio ambiente subaquático. A API permite a gestão de voluntários, parceiros, eventos e alertas, proporcionando uma interface backend robusta para um sistema de gerenciamento completo. Além disso, a API integra-se com serviços externos para validação de CEPs e e-mails, garantindo a qualidade dos dados inseridos no sistema.
@@ -26,13 +26,6 @@ A VitaliSea é uma start-up que busca auxiliar nas práticas sustentáveis de pr
   - **eventsVolunteers**: Tabela intermediária para o relacionamento entre Eventos e Voluntários.
   - **_BaseEntity**: Base para todas as entidades.
 
-
-## Diagrama de Classes
-
-## Protótipo das Telas do Front-end
-
-## Estrutura do Banco de Dados
-
 ## Tecnologias Utilizadas
 - **Java**: Linguagem de programação principal.
 - **SQL**: Sistema de gerenciamento de banco de dados.
@@ -47,4 +40,11 @@ A VitaliSea é uma start-up que busca auxiliar nas práticas sustentáveis de pr
 ### Passos para Executar
 1. Clone o repositório:
    ```bash
-   git clone [link-do-repositorio]
+   git clone https://github.com/LiviaMarianaLopes/java-global-solution-api.git
+2. Navegue até o diretório do projeto:
+   ```bash
+      cd java-global-solution-api
+3. Compile e rode a classe principal Main:
+   ```bash
+      javac -d target src/main/java/org.example/Main.java
+      java  -cp target main.java.org.example.Main
