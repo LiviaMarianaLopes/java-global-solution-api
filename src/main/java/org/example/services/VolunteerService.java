@@ -14,7 +14,7 @@ import javax.json.JsonReader;
 import java.util.Objects;
 
 public class VolunteerService {
-    private static final String BASE_URL = "https://emailvalidation.abstractapi.com/v1/?api_key=6b82ca468eb240b5b5af38a2b24a642e&email=";
+    private static final String BASE_URL = "https://emailvalidation.abstractapi.com/v1/?api_key=234efca9c32641f9bf2d3737a7fa2c8b&email=";
     private VolunteerRepository volunteerRepository;
 
 

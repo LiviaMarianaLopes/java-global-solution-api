@@ -136,7 +136,7 @@ public class VolunteerRepository implements _BaseRepository<Volunteer>, Loggable
             }
 
         } catch (Exception e) {
-            System.out.println("Erro ao listar voluntários: " + e.getMessage());
+            logError("Erro ao listar voluntários: " + e.getMessage());
         }
         return volunterrs;
     }
